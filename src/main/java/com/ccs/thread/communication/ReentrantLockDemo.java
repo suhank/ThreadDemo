@@ -19,7 +19,7 @@ public class ReentrantLockDemo {
             try {
                 if(startt2 == true){
                     System.out.println("执行线程1等待");
-                    conditionT1.await(); //线程1的用conditionT1先阻塞
+                    conditionT1.await(); //线程1的用conditionT1先阻塞，此时也会释放锁了等于unlock了
                     System.out.println("执行线程1等待结束");
                 }
             } catch (InterruptedException e) {
