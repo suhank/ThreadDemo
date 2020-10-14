@@ -10,6 +10,10 @@ Java通过Executors提供四种线程池，分别为：
 4、newSingleThreadExecutor 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。
 https://www.cnblogs.com/yinfj/p/9844778.html
 
+volatile保证不了线程安全。想要线程安全必须保证原子性，可见性，有序性。而volatile只能保证可见性和有序性。
+如果赋值是没有问题的，进行++等非原子操作就有线程安全问题。
+https://blog.csdn.net/qq_33330687/article/details/80990729
+
 线程的通讯：
 两个线程，轮流打印信息，来自马士兵培训
 1.Atomic和Volatile类似，利用线程安全的变量控制。空循环也会耗损cpu，但是因为等待时间很短影响不大。
@@ -20,7 +24,8 @@ https://www.cnblogs.com/yinfj/p/9844778.html
 6.locksupport park锁定当前线程，unpark(thread对象)解锁指定线程
 
 控制线程执行顺序 
-1.通过线程安全变量，后执行进行空循环等待
+0.join
+1.通过线程安全变量，后执行进行空循环也就是自旋等待
 2.通过synchronize操作，通过锁对象要后执行的线程操作进行wait操作，等待前面线程notify唤醒。
 3.countdownlatch, 构造latch的数量。后执行线程通过wait方法等待，直到别的线程调用countdown等于0之后执行。
 4.ReentrantLock 的condition来控制  这里控制顺序的时候await不能先执行，否则卡死。
@@ -43,3 +48,8 @@ Condition类能实现synchronized和wait、notify搭配的功能，另外比后�
 从而可以有选择的进行线程通知，在调度线程上更加灵活。
 
 volatile仅仅用来保证该变量对所有线程的可见性，但不保证原子性。
+
+
+控制线程执行的并发数量： 
+1.fix线程池
+2.semaphore 如果是1就是sychronize
